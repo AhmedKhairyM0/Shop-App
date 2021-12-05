@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shop_app/core/constants.dart';
+import 'package:shop_app/config/constants.dart';
 
 enum ToastType {
   error,

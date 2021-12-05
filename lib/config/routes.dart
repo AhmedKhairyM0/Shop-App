@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/modules/auth/login_screen.dart';
-import 'package:shop_app/modules/auth/register_screen.dart';
-import 'package:shop_app/modules/home/home_screen.dart';
+import 'package:shop_app/modules/auth/screens/login_screen.dart';
+import 'package:shop_app/modules/auth/screens/register_screen.dart';
 import 'package:shop_app/modules/onboarding/onboarding_screen.dart';
+import 'package:shop_app/modules/shopping/shop_screen.dart';
 
 class RouteGenerator {
   static const onboardingScreen = 'onboarding';
-  static const homeScreen = 'home';
+  static const shoppingScreen = 'shopping';
   static const loginScreen = 'login';
   static const registerScreen = 'register';
 
@@ -18,8 +18,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
-      case homeScreen:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case shoppingScreen:
+        return MaterialPageRoute(builder: (_) => const ShoppingScreen());
       default:
         return _errorScreen();
     }

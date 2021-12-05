@@ -30,9 +30,9 @@ class LoginModel {
 
 class UserModel {
   int? id;
-  String? name;
-  String? email;
-  String? phone;
+  String? name; // required
+  String? email; // required
+  String? phone; // required
   String? image;
   dynamic points;
   dynamic credit;

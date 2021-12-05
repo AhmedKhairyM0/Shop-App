@@ -1,8 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedCache {
+  SharedCache._internal();
+  static SharedCache? shared;
+  factory SharedCache() {
+    return shared ??= SharedCache._internal();
+  }
   static late final SharedPreferences _sharedPreferences;
-  static void init() async {
+  static Future<void> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
@@ -14,4 +19,9 @@ class SharedCache {
   }
 
   getData(String key) => _sharedPreferences.get(key);
+
+  // SharedPreferences Keys
+  static const String skipOnboarding = 'skipOnboarding';
+  static const String token = 'token';
+  static const String isDark = 'isDark';
 }

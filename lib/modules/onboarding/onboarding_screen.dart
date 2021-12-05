@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/core/constants.dart';
-import 'package:shop_app/core/space_config.dart';
-import 'package:shop_app/shared/widgets/custom_buttons.dart';
+import 'package:get/get.dart';
+import 'package:shop_app/config/constants.dart';
+import 'package:shop_app/config/routes.dart';
+import 'package:shop_app/config/space_config.dart';
+import 'package:shop_app/core/services/sharedCache/shared_cache.dart';
+import 'package:shop_app/core/widgets/custom_buttons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 var onboardingItems = [
@@ -35,9 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
-    _pageViewController = PageController()..addListener(() {
-
-     });
+    _pageViewController = PageController()..addListener(() {});
   }
 
   @override
@@ -69,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               visible: _pageViewController.hasClients && !isLastPage(),
               child: CustomTextButton(
                 label: "SKIP",
-                onPressed: () {},
+                onPressed: skipOnboarding,
               ),
             ),
           ),
@@ -104,6 +105,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
+                } else {
+                  skipOnboarding();
                 }
               },
             ),
@@ -111,6 +114,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ],
       ),
     );
+  }
+
+  void skipOnboarding() {
+    SharedCache().saveData(SharedCache.skipOnboarding, true);
+    Get.toNamed(RouteGenerator.shoppingScreen);
   }
 }
 

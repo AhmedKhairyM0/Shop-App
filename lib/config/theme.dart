@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/core/constants.dart';
+import 'package:shop_app/config/constants.dart';
 
 ///? headline4    34.0  regular  0.25
 ///? headline5    24.0  regular  0.0

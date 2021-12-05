@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shop_app/core/routes.dart';
-import 'package:shop_app/core/space_config.dart';
-import 'package:shop_app/core/utils.dart';
-import 'package:shop_app/core/validation.dart';
+import 'package:shop_app/config/routes.dart';
+import 'package:shop_app/config/space_config.dart';
+import 'package:shop_app/config/utils.dart';
+import 'package:shop_app/config/validation.dart';
+import 'package:shop_app/core/widgets/custom_buttons.dart';
+import 'package:shop_app/core/widgets/loading_indicator.dart';
+import 'package:shop_app/modules/auth/cubit/auth_cubit.dart';
+import 'package:shop_app/modules/auth/cubit/auth_states.dart';
 import 'package:shop_app/modules/auth/widgets/custom_text_form.dart';
-import 'package:shop_app/shared/widgets/custom_buttons.dart';
-import 'package:shop_app/shared/widgets/loading_indicator.dart';
 
-import 'cubit/auth_cubit.dart';
-import 'cubit/auth_states.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _widget = const LoadingIndicator();
           }
           if (state is AuthSuccessState) {
-            Utils.toOffAll(context, RouteGenerator.homeScreen);
+            Utils.toOffAll(context, RouteGenerator.shoppingScreen);
           }
           if (state is AuthErrorState) {
             Utils.showToast(

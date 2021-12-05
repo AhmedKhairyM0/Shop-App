@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/core/constants.dart';
+import 'package:shop_app/config/constants.dart';
 
 class GeneralButton extends StatelessWidget {
   const GeneralButton({
@@ -53,10 +53,7 @@ class CustomTextButton extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .button
-              ?.copyWith(color: color),
+          style: Theme.of(context).textTheme.button?.copyWith(color: color),
         ),
       ),
       onTap: onPressed,
@@ -89,6 +86,28 @@ class CircleButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
+    Key? key,
+    required this.icon,
+    required this.onPressed,
+    this.color = kSecondaryColor,
+  }) : super(key: key);
+
+  final IconData icon;
+  final VoidCallback onPressed;
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon),
+      color: color,
+      padding: EdgeInsets.all(1),
+      onPressed: onPressed,
     );
   }
 }

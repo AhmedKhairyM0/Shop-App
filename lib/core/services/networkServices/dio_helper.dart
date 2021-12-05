@@ -43,7 +43,7 @@ class DioHelper {
 
   Future<Response> postData({
     required String path,
-    required Map<String, dynamic> data,
+    Map<String, dynamic>? data,
     Map<String, dynamic>? query,
     String lang = 'en',
     String token = '',
@@ -60,12 +60,24 @@ class DioHelper {
       queryParameters: query,
     );
   }
-}
 
-class EndPoints {
-  static const login = 'login';
-  static const register = 'register';
-  static const logout = 'logout';
-
-  // static const home = '';
+  Future<Response> putData({
+    required String path,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? query,
+    String lang = 'en',
+    String token = '',
+  }) async {
+    var headers = _dio.options.headers;
+    headers.addAll({
+      'lang': lang,
+      'Authorization': token,
+    });
+    return await _dio.put(
+      path,
+      data: data,
+      options: Options(headers: headers),
+      queryParameters: query,
+    );
+  }
 }

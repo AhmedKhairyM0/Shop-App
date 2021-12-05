@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shop_app/core/constants.dart';
-import 'package:shop_app/core/routes.dart';
-import 'package:shop_app/core/space_config.dart';
-import 'package:shop_app/core/utils.dart';
-import 'package:shop_app/core/validation.dart';
+import 'package:get/get.dart';
+import 'package:shop_app/config/constants.dart';
+import 'package:shop_app/config/routes.dart';
+import 'package:shop_app/config/space_config.dart';
+import 'package:shop_app/config/utils.dart';
+import 'package:shop_app/config/validation.dart';
+import 'package:shop_app/core/widgets/custom_buttons.dart';
+import 'package:shop_app/core/widgets/loading_indicator.dart';
+import 'package:shop_app/modules/auth/cubit/auth_cubit.dart';
 import 'package:shop_app/modules/auth/cubit/auth_states.dart';
 import 'package:shop_app/modules/auth/widgets/custom_text_form.dart';
-import 'package:shop_app/shared/widgets/custom_buttons.dart';
-import 'package:shop_app/shared/widgets/loading_indicator.dart';
-
-import 'cubit/auth_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -66,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             );
           } else if (state is AuthSuccessState) {
-            Utils.toOffAll(context, RouteGenerator.homeScreen);
+            Get.toNamed(RouteGenerator.shoppingScreen);
           }
         },
         builder: (context, state) {
@@ -124,19 +123,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: const Icon(FontAwesomeIcons.google,
-                              color: Color(0xFFEF5350)),
+                        CustomIconButton(
+                          icon: FontAwesomeIcons.google,
+                          color: Colors.red,
                           onPressed: () {},
                         ),
-                        IconButton(
-                          icon: const Icon(FontAwesomeIcons.facebook,
-                              color: Color(0xFF1565C0)),
+                        CustomIconButton(
+                          icon: FontAwesomeIcons.facebook,
+                          color: const Color(0xFF1565C0),
                           onPressed: () {},
                         ),
-                        IconButton(
-                          icon: const Icon(FontAwesomeIcons.twitter,
-                              color: Colors.blueAccent),
+                        CustomIconButton(
+                          icon: FontAwesomeIcons.twitter,
+                          color: Colors.blueAccent,
                           onPressed: () {},
                         ),
                       ],
