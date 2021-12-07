@@ -14,3 +14,9 @@ class ShoppingErrorState extends ShoppingStates {
 }
 
 class ChangedInternetStatus extends ShoppingStates {}
+
+// Cart states
+
+class ProductAddedToCart extends ShoppingStates {}
+
+class ProductRemovedToCart extends ShoppingStates {}

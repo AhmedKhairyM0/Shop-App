@@ -3,14 +3,13 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/config/constants.dart';
-import 'package:shop_app/config/routes.dart';
-import 'package:shop_app/config/space_config.dart';
-import 'package:shop_app/core/widgets/custom_buttons.dart';
-import 'package:shop_app/core/widgets/loading_indicator.dart';
-import 'package:shop_app/modules/shopping/cubit/shopping_cubit.dart';
-import 'package:shop_app/modules/shopping/cubit/shopping_states.dart';
-import 'package:shop_app/modules/shopping/models/home_model.dart';
+
+import '../../../config/space_config.dart';
+import '../../../core/widgets/custom_buttons.dart';
+import '../../../core/widgets/loading_indicator.dart';
+import '../cubit/shopping_cubit.dart';
+import '../cubit/shopping_states.dart';
+import '../widgets/product_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -103,27 +102,7 @@ class LoadedWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 210,
-            child: CarouselSlider(
-              items: cubit.homeData!.banners!.map((banner) {
-                return FadeInImage.assetNetwork(
-                  placeholder: "assets/images/loading.png",
-                  image: banner.image!,
-                  fit: BoxFit.cover,
-                );
-              }).toList(),
-              options: CarouselOptions(
-                height: 250,
-                viewportFraction: 1.0,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enlargeCenterPage: true,
-                autoPlay: true,
-              ),
-            ),
-          ),
+          SliderWidget(cubit: cubit),
           const VerticalSpace(value: 10),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -166,89 +145,35 @@ class LoadedWidget extends StatelessWidget {
   }
 }
 
-class ProductItemWidget extends StatelessWidget {
-  const ProductItemWidget({
+class SliderWidget extends StatelessWidget {
+  const SliderWidget({
     Key? key,
-    required this.product,
+    required this.cubit,
   }) : super(key: key);
 
-  final Product product;
+  final ShoppingCubit cubit;
+  
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 5,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            RouteGenerator.productDetailsScreen,
-            arguments: product,
+    return SizedBox(
+      height: 210,
+      child: CarouselSlider(
+        items: cubit.homeData!.banners!.map((banner) {
+          return FadeInImage.assetNetwork(
+            placeholder: "assets/images/loading.png",
+            image: banner.image!,
+            fit: BoxFit.cover,
           );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    FadeInImage.assetNetwork(
-                      placeholder: "assets/images/loading.png",
-                      image: product.image!,
-                      fit: BoxFit.cover,
-                    ),
-                    if (product.discount != 0)
-                      Container(
-                        color: Colors.red,
-                        width: 25,
-                        height: 25,
-                        child: Center(
-                          child: Text(
-                            '${product.discount}%',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Text(
-                product.name!,
-                style: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(color: Colors.black),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              const VerticalSpace(value: 5),
-              Row(
-                children: [
-                  Text(
-                    '\$${product.price!.toStringAsFixed(2)}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption!
-                        .copyWith(color: kSecondaryColor),
-                  ),
-                  const HorizonalSpace(value: 20),
-                  if (product.discount != 0)
-                    Text(
-                      '\$${product.oldPrice!.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.caption!.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey,
-                          ),
-                    ),
-                ],
-              ),
-            ],
-          ),
+        }).toList(),
+        options: CarouselOptions(
+          height: 250,
+          viewportFraction: 1.0,
+          autoPlayInterval: const Duration(seconds: 3),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          autoPlay: true,
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class HomeModel {
   bool? status;
   String? message;
@@ -97,5 +99,36 @@ class Product {
   @override
   String toString() {
     return 'Product{id: $id, price: $price, oldPrice: $oldPrice, discount: $discount, image: $image, name: $name, description: $description, images: $images, inFavorites: $inFavorites, inCart: $inCart}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is Product &&
+      other.id == id &&
+      other.price == price &&
+      other.oldPrice == oldPrice &&
+      other.discount == discount &&
+      other.image == image &&
+      other.name == name &&
+      other.description == description &&
+      listEquals(other.images, images) &&
+      other.inFavorites == inFavorites &&
+      other.inCart == inCart;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      price.hashCode ^
+      oldPrice.hashCode ^
+      discount.hashCode ^
+      image.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      images.hashCode ^
+      inFavorites.hashCode ^
+      inCart.hashCode;
   }
 }

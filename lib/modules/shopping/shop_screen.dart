@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/config/constants.dart';
 import 'package:shop_app/core/widgets/custom_buttons.dart';
 import 'package:shop_app/modules/shopping/cubit/shopping_cubit.dart';
 import 'package:shop_app/modules/shopping/cubit/shopping_states.dart';
@@ -18,7 +19,7 @@ class ShoppingScreen extends StatelessWidget {
     FavoriteScreen(),
     AccountScreen(),
   ];
-  static int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppingCubit, ShoppingStates>(
@@ -29,25 +30,16 @@ class ShoppingScreen extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Salla'),
             actions: [
-              StatefulBuilder(
-                builder: (context, setState) {
-                  
-                  return Badge(
-                    badgeContent: Text('$currentIndex',
-                        style: const TextStyle(color: Colors.white)),
-                        showBadge: currentIndex != 0,
-                    animationType: BadgeAnimationType.scale,
-                    position: BadgePosition.topStart(top: 5, start: -8),
-                    child: CustomIconButton(
-                      icon: Icons.add_shopping_cart_outlined,
-                      onPressed: () {
-                        setState(() {
-                          currentIndex++;
-                        });
-                      },
-                    ),
-                  );
-                },
+              Badge(
+                badgeContent: Text('${cubit.cart.length}',
+                    style: const TextStyle(color: kOnSecondaryColor)),
+                showBadge:  cubit.cart.isNotEmpty,
+                animationType: BadgeAnimationType.scale,
+                position: BadgePosition.topStart(top: 5, start: -8),
+                child: CustomIconButton(
+                  icon: Icons.add_shopping_cart_outlined,
+                  onPressed: () {},
+                ),
               ),
             ],
           ),

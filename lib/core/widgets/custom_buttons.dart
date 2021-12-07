@@ -26,7 +26,7 @@ class GeneralButton extends StatelessWidget {
                         .textTheme
                         .button
                         ?.copyWith(color: Colors.white))),
-            width: 300,
+            width: double.infinity,
             height: 50,
           ),
         ),
@@ -66,10 +66,12 @@ class CircleButton extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.onPressed,
+    this.radius = 30,
   }) : super(key: key);
 
   final IconData icon;
   final VoidCallback onPressed;
+  final double radius;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -80,7 +82,7 @@ class CircleButton extends StatelessWidget {
           onTap: onPressed,
           child: CircleAvatar(
             child: Icon(icon),
-            radius: 30,
+            radius: radius,
             backgroundColor: kPrimaryColor,
             foregroundColor: kOnPrimaryColor,
           ),

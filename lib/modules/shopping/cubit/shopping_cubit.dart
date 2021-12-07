@@ -44,4 +44,19 @@ class ShoppingCubit extends Cubit<ShoppingStates> {
       );
     });
   }
+
+  List<Product> cart = List.empty(growable: true);
+
+  void addToCart(Product product) {
+    // TODO: check if the product's quantity is available
+    cart.add(product);
+    emit(ProductAddedToCart());
+  }
+
+  void removeFromCart(Product item) {
+    if (cart.contains(item)) {
+      cart.remove(item);
+      emit(ProductRemovedToCart());
+    }
+  }
 }
