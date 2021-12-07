@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:shop_app/config/failure.dart';
 import 'package:shop_app/core/services/networkServices/dio_helper.dart';
 import 'package:shop_app/core/services/networkServices/end_points.dart';
@@ -16,8 +15,10 @@ class ShoppingRepoImpl implements ShoppingRepo {
         token: token,
       );
       var shoppingModel = HomeModel.fromJson(response.data);
+      print(shoppingModel.toString());
       return Right(shoppingModel.data!);
     } catch (error) {
+      print(error);
       return Left(Failure.serverError());
     }
   }

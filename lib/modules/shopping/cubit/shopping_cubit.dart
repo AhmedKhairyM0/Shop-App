@@ -20,12 +20,14 @@ class ShoppingCubit extends Cubit<ShoppingStates> {
 
   bool isConnected = true;
   void checkInternet() async {
+    emit(ShoppingLoadingState());
+
     isConnected = await InternetStatus().isConnected();
     emit(ChangedInternetStatus());
   }
 
   ShoppingRepo shoppingRepo = ShoppingRepoImpl();
-  late HomeData homeData = HomeData();
+  HomeData? homeData;
   void getHomeData() {
     emit(ShoppingLoadingState());
     shoppingRepo.getHomeData().then((result) {

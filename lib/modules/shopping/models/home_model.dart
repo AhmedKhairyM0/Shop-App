@@ -16,12 +16,12 @@ class HomeModel {
 
 class HomeData {
   List<Banner>? banners;
-  List<Product>? product;
+  List<Product>? products;
   String? ad;
 
   HomeData({
     this.banners,
-    this.product,
+    this.products,
     this.ad,
   });
 
@@ -33,21 +33,21 @@ class HomeData {
       });
     }
     List<Product>? product = List.empty(growable: true);
-    if (json['product'] != null) {
-      json['product'].forEach((element) {
+    if (json['products'] != null) {
+      json['products'].forEach((element) {
         product.add(Product.fromJson(element));
       });
     }
     String? ad = json['ad'];
     return HomeData(
       banners: _banners,
-      product: product,
+      products: product,
       ad: ad,
     );
   }
   @override
   String toString() {
-    return 'HomeData{banners: $banners, product: $product, ad: $ad}';
+    return 'HomeData{banners: $banners, product: $products, ad: $ad}';
   }
 }
 

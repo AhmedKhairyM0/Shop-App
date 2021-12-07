@@ -24,6 +24,7 @@ dependencies:
   fluttertoast: ^8.0.8
   font_awesome_flutter: ^9.2.0
   get: ^4.5.1
+  photo_view: ^0.13.0
   shared_preferences: ^2.0.9
   smooth_page_indicator: ^1.0.0+2
 

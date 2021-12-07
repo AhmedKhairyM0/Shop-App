@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/config/constants.dart';
+import 'package:shop_app/config/routes.dart';
 import 'package:shop_app/config/space_config.dart';
-import 'package:shop_app/core/services/networkServices/connectivity_state.dart';
 import 'package:shop_app/core/widgets/custom_buttons.dart';
 import 'package:shop_app/core/widgets/loading_indicator.dart';
 import 'package:shop_app/modules/shopping/cubit/shopping_cubit.dart';
 import 'package:shop_app/modules/shopping/cubit/shopping_states.dart';
+import 'package:shop_app/modules/shopping/models/home_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,23 +26,27 @@ class HomeScreen extends StatelessWidget {
           return NoInternetWidget(cubit: cubit);
         }
 
-        if (state is ShoppingLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
         if (state is ShoppingErrorState) {
           return Center(
             child: Text(state.errorMessage),
           );
         }
 
-        return LoadedWidget(cubit: cubit);
+        if (cubit.homeData != null) {
+          return LoadedWidget(cubit: cubit);
+        }
+
+        return const LoadingIndicator();
       },
     );
   }
 }
+
+// 1. NoInternetView
+// 2. LoadingView
+// 3. LoadingImageState
+// 4. LoadedView
+// 5. ErrorView
 
 class NoInternetWidget extends StatelessWidget {
   const NoInternetWidget({
@@ -91,41 +99,158 @@ class LoadedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 210,
-          child: CarouselSlider(
-            items: cubit.homeData.banners!.map((banner) {
-              return FadeInImage.assetNetwork(
-                placeholder: "assets/images/loading.gif",
-                image: banner.image!,
-                fit: BoxFit.cover,
-              );
-            }).toList(),
-            options: CarouselOptions(
-              height: 250,
-              viewportFraction: 1.0,
-              autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              autoPlay: true,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 210,
+            child: CarouselSlider(
+              items: cubit.homeData!.banners!.map((banner) {
+                return FadeInImage.assetNetwork(
+                  placeholder: "assets/images/loading.png",
+                  image: banner.image!,
+                  fit: BoxFit.cover,
+                );
+              }).toList(),
+              options: CarouselOptions(
+                height: 250,
+                viewportFraction: 1.0,
+                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: true,
+                autoPlay: true,
+              ),
             ),
           ),
-        ),
-        const VerticalSpace(value: 10),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
+          const VerticalSpace(value: 10),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Top Products',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 10,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    max(2, (MediaQuery.of(context).size.width / 150).floor()),
+                childAspectRatio: 1 / 1.3,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              itemBuilder: (ctx, index) {
+                return ProductItemWidget(
+                    product: cubit.homeData!.products![index]);
+              },
+            ),
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(20.0),
+          //   child: Column(
+          //     children: [
+          //       Text('Category', style: Theme.of(context).textTheme.headline6),
+          //       // CategoryItemWidget(image:, label: ,),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductItemWidget extends StatelessWidget {
+  const ProductItemWidget({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final Product product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 5,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            RouteGenerator.productDetailsScreen,
+            arguments: product,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Category', style: Theme.of(context).textTheme.headline6),
-              // CategoryItemWidget(image:, label: ,),
+              Expanded(
+                child: Stack(
+                  children: [
+                    FadeInImage.assetNetwork(
+                      placeholder: "assets/images/loading.png",
+                      image: product.image!,
+                      fit: BoxFit.cover,
+                    ),
+                    if (product.discount != 0)
+                      Container(
+                        color: Colors.red,
+                        width: 25,
+                        height: 25,
+                        child: Center(
+                          child: Text(
+                            '${product.discount}%',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Text(
+                product.name!,
+                style: Theme.of(context)
+                    .textTheme
+                    .caption!
+                    .copyWith(color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              const VerticalSpace(value: 5),
+              Row(
+                children: [
+                  Text(
+                    '\$${product.price!.toStringAsFixed(2)}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
+                        .copyWith(color: kSecondaryColor),
+                  ),
+                  const HorizonalSpace(value: 20),
+                  if (product.discount != 0)
+                    Text(
+                      '\$${product.oldPrice!.toStringAsFixed(2)}',
+                      style: Theme.of(context).textTheme.caption!.copyWith(
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.grey,
+                          ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -149,7 +274,7 @@ class CategoryItemWidget extends StatelessWidget {
         child: Stack(
           children: [
             FadeInImage.assetNetwork(
-              placeholder: "assets/images/loading.gif",
+              placeholder: "assets/images/loading.png",
               image: image,
               fit: BoxFit.cover,
             ),
@@ -175,9 +300,3 @@ class CategoryItemWidget extends StatelessWidget {
     );
   }
 }
-
-// 1. NoInternetScreen
-// 2. LoadingScreen
-// 3. LoadingImageState
-// 4. LoadedScreen
-// 5. ErrorScreen
